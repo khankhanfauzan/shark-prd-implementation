@@ -1,88 +1,130 @@
-# Shark PRD Implementation
+# 🦈 Shark PRD Implementation - Nx Monorepo
 
-Monorepo berbasis **Nx Workspace** yang mengintegrasikan aplikasi **Frontend (Next.js)** dan **Backend (NestJS)** dalam satu ekosistem pengembangan.
+Monorepo berbasis **Nx Workspace** yang mengintegrasikan aplikasi **Frontend (Next.js)** dan **Backend (NestJS)** dalam satu ekosistem pengembangan, dengan modul database terisolasi berbasis **Prisma ORM v7** dan **PostgreSQL**.
 
 ---
 
-## 🛠️ Tech Stack & Prasyarat
+## 🛠️ Tech Stack & Prasyarat Sistem
 
-Sebelum memulai, pastikan perangkat Anda telah terinstal:
+Sebelum memulai pengembangan, pastikan perangkat Anda telah terinstal:
 
 - **Node.js**: versi `>= 18.x` (direkomendasikan LTS)
-- **Package Manager**: `npm`, `yarn`, atau `pnpm`
+- **Package Manager**: `npm`
+- **PostgreSQL**: Service berjalan di `localhost:5432`
+- **DBeaver** / SQL Client (Opsional)
 - **Git**
 
 ---
 
 ## 🔌 Ekstensi VSCode (Sangat Direkomendasikan)
 
-Untuk memberikan pengalaman pengembangan terbaik dan kemudahan menjalankan skrip monorepo, **setiap developer wajib menginstal ekstensi VSCode berikut**:
+Untuk pengalaman pengembangan terbaik dan eksekusi target 1-Click:
 
-- [**Nx Console**](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)  
-  _Ekstensi resmi dari Nx untuk menjalankan target, generator, dan memvisualisasikan grafik ketergantungan project secara langsung dari VSCode UI._
+1. [**Nx Console**](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)  
+   _Ekstensi resmi Nx untuk menjalankan target, generator, dan memvisualisasikan grafik proyek secara visual (termasuk fitur 1-Click Database Setup)._
+2. [**Prisma Extension**](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)  
+   _Highlight sintaks dan auto-complete untuk skema `.prisma`._
 
 ---
 
-## ⚙️ Panduan Instalasi & Setup
+## ⚙️ Panduan Instalasi & Setup Aplikasi
 
 ### 1. Clone Repository
 
 ```bash
 git clone [https://github.com/khankhanfauzan/shark-prd-implementation.git](https://github.com/khankhanfauzan/shark-prd-implementation.git)
 cd shark-prd-implementation
+
 ```
 
 ### 2. Instalasi Nx CLI Secara Global (Opsional)
-
-Menginstal Nx CLI secara global memudahkan Anda menjalankan perintah `nx` langsung dari terminal tanpa menggunakan `npx`:
 
 ```bash
 npm install -g nx
 
 ```
 
-> **Catatan**: Jika Anda memilih untuk tidak menginstalnya secara global, Anda bisa menyisipkan `npx` di setiap perintah `nx` (misal: `npx nx run ...`).
+> **Catatan**: Jika tidak menginstalnya secara global, gunakan perintah `npx nx` di setiap target.
 
 ### 3. Install Dependencies
 
-Jalankan perintah berikut di direktori utama (root):
-
 ```bash
 npm install
-# atau
-pnpm install
-# atau
-yarn install
 
 ```
 
-### 4. Setup Environment Variables
+---
 
-Buat file `.env` di masing-masing direktori project (atau ikuti `.env.example` yang tersedia) untuk mengatur konfigurasi database, API endpoint, dan rahasia aplikasi lainnya.
+## 🗄️ Setup Database & Environment (Automated)
+
+### Langkah 1: Konfigurasi Environment File (`.env`)
+
+Duplikat file `.env.example` yang tersedia di root project menjadi `.env`:
+
+```bash
+cp .env.example .env
+
+```
+
+Buka file `.env` di root project dan sesuaikan kredensial PostgreSQL lokal Anda:
+
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/shark_db?schema=public"
+
+```
+
+> **Catatan:** Sesuaikan `postgres` dan `password` dengan username & password PostgreSQL lokal Anda.
 
 ---
 
-## 🚀 Cara Menjalankan Project
+### Langkah 2: Menjalankan Automated Database Setup (1-Click / CLI)
 
-Anda dapat menjalankan Frontend dan Backend secara bersamaan menggunakan skrip yang sudah dikonfigurasi.
+Project ini telah dilengkapi **Auto-Database Creation Script**. Anda **tidak perlu** membuat database `shark_db` secara manual di DBeaver/psql. Script akan mendeteksi dan membuat database otomatis jika belum tersedia.
 
-### Opsi A: Menggunakan VSCode Extensions (Nx Console) — **Direkomendasikan**
+Pilih salah satu cara berikut:
 
-1. Buka sidebar **Nx Console** di VSCode Anda (ikon Nx).
+#### Opsi A: Menggunakan Nx Console Extension (1-Click UI — **Direkomendasikan**)
+
+1. Buka sidebar **Nx Console** di VSCode / Cursor (ikon logo Nx).
+2. Di panel **Projects**, _expand_ folder **`database`**.
+3. Cari target **`db-setup`**.
+4. Klik tombol **Run / Play ▶** di samping `db-setup`.
+
+#### Opsi B: Menggunakan Terminal CLI
+
+Jalankan satu perintah berikut dari direktori root:
+
+```bash
+npx nx db-setup database
+
+```
+
+> **Apa yang dilakukan oleh `db-setup` secara berurutan?**
+>
+> 1. **`init-db`**: Mengecek & membuat database `shark_db` di PostgreSQL secara otomatis.
+> 2. **`db-migrate`**: Menjalankan migrasi skema Prisma ke database.
+> 3. **`db-generate`**: Meng-generate tipe data `@prisma/client` terbaru.
+> 4. **`db-seed`**: Menyuntikkan data _seed_ (dummy) awal ke database.
+
+---
+
+## 🚀 Cara Menjalankan Aplikasi (Frontend & Backend)
+
+### Opsi A: Menggunakan VSCode Extension (Nx Console) — **Direkomendasikan**
+
+1. Buka sidebar **Nx Console** di VSCode.
 2. Masuk ke menu **Projects** > pilih project **Frontend**.
 3. Cari dan klik target **`serve-with-backend`**.
-4. Klik tombol **Run**.
-   _Perintah ini akan otomatis memicu backend dan frontend berjalan secara bersamaan di terminal interaktif._
+4. Klik tombol **Run / Play ▶**.
+   _Backend dan Frontend akan otomatis berjalan bersamaan di terminal interaktif._
 
 ### Opsi B: Menggunakan Terminal (CLI)
 
-Jalankan perintah berikut dari direktori root:
-
 ```bash
-# Menjalankan target serve-with-backend dari frontend
+# Menjalankan Frontend & Backend sekaligus
 nx run frontend:serve-with-backend
 
-# ATAU menjalankan masing-masing service secara terpisah di terminal terpisah:
+# ATAU menjalankan masing-masing service di terminal terpisah:
 nx serve backend
 nx serve frontend
 
@@ -90,48 +132,59 @@ nx serve frontend
 
 ---
 
-## 📦 Kelola Package & Dependensi di Nx Monorepo
+## 📋 Daftar Perintah Database (Nx Targets)
 
-Secara default, Nx menggunakan strategi **Single Version Policy**, di mana sebagian besar dependency pihak ketiga (_third-party packages_) diinstall di level **root `package.json**` agar versi library yang digunakan seragam di seluruh project.
+Daftar perintah pengelola database yang dapat dijalankan via **Nx Console** (Ikon Play ▶) atau Terminal:
 
-### 1. Menambahkan Package / Library Baru (NPM / PNPM / YARN)
+| Target Name       | Command CLI               | Deskripsi                                                               |
+| ----------------- | ------------------------- | ----------------------------------------------------------------------- |
+| **`db-setup`**    | `nx db-setup database`    | **Full Setup:** Auto Create DB + Migrate + Generate Client + Seed Data. |
+| **`db-migrate`**  | `nx db-migrate database`  | Memuat perubahan skema ke database (`prisma migrate dev`).              |
+| **`db-generate`** | `nx db-generate database` | Meng-update tipe `@prisma/client` setelah skema diubah.                 |
+| **`db-seed`**     | `nx db-seed database`     | Menjalankan script pembentukan data dummy (`seed.ts`).                  |
+| **`db-studio`**   | `nx db-studio database`   | Membuka GUI Prisma Studio di browser (`http://localhost:5555`).         |
 
-Jalankan instalasi dari root folder seperti biasa:
+---
 
-```bash
-# Menambahkan dependency biasa
-npm install <package-name>
+## 📂 Manual SQL Reference (DBeaver / `psql`)
 
-# Menambahkan devDependency
-npm install -D <package-name>
+Jika Anda ingin menjalankan atau mereset database secara manual melalui DBeaver atau `psql`, script SQL resmi telah disediakan di **`libs/database/prisma/init.sql`**:
 
-```
-
-### 2. Menambahkan Generator atau Plugin Resmi Nx
-
-Jika Anda membutuhkan generator bawaan Nx (seperti React/Next.js, NestJS, Tailwind, dsb.):
-
-```bash
-# Contoh: Menambahkan plugin Next.js / NestJS
-nx add @nx/next
-nx add @nx/nest
+```sql
+-- libs/database/prisma/init.sql
+CREATE DATABASE shark_db;
+ALTER DATABASE shark_db OWNER TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE shark_db TO postgres;
 
 ```
 
-### 3. Membuat Komponen / Module Baru Menggunakan Nx CLI
+---
 
-Gunakan flag `--project` untuk mengarahkan file baru ke project spesifik (**frontend** atau **backend**):
+## 📁 Struktur Folder Utama Workspace
 
-```bash
-# Contoh: Membuat komponen React baru untuk Frontend
-nx g @nx/next:component my-button --project=frontend
-
-# Contoh: Membuat Service baru di NestJS untuk Backend
-nx g @nx/nest:service my-service --project=backend
+```text
+shark-prd-implementation/
+├── apps/
+│   ├── frontend/          # Aplikasi Next.js
+│   └── backend/           # Aplikasi NestJS
+├── libs/
+│   └── database/          # Shared Library Prisma & DB Configuration
+│       ├── prisma/
+│       │   ├── schema.prisma # Skema tabel database
+│       │   ├── seed.ts       # Script data dummy
+│       │   ├── init.sql      # Referensi manual SQL setup
+│       │   └── migrations/   # History migrasi SQL
+│       ├── scripts/
+│       │   └── init-db.ts    # Script otomatis pembuatan database PostgreSQL
+│       ├── src/              # PrismaService & Export Library
+│       ├── tsconfig.lib.json # Konfigurasi TypeScript Library
+│       ├── prisma.config.ts  # Konfigurasi Prisma v7
+│       └── project.json      # Registrasi Target Nx Database
+├── .env.example           # Template variabel lingkungan
+├── nx.json                # Konfigurasi workspace Nx
+└── package.json           # Dependencies root workspace
 
 ```
-
-_Atau manfaatkan GUI **Nx Console** di VSCode pada menu **Generate** untuk memilih opsi pembuatan komponen secara visual._
 
 ---
 
