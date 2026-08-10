@@ -4,6 +4,7 @@
     "outDir": "../../dist/out-tsc",
     "declaration": true,
     "types": ["node"],
+    "module" : "esnext",
     "target": "es2021",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -13,7 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.t", "*.ts", "prisma/*.ts"],
+  "include": ["src/**/*.ts", "*.ts", "prisma/*.ts"],
   "exclude": [
     "jest.config.ts",
     "jest.config.cts",

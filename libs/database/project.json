@@ -4,6 +4,42 @@
   "sourceRoot": "libs/database/src",
   "projectType": "library",
   "tags": [],
-  "// targets": "to see all targets run: nx show project database --web",
-  "targets": {}
+  "targets": {
+    "db-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx ts-node -T libs/database/scripts/init-db.ts",
+          "npx prisma migrate dev --config=libs/database/prisma.config.ts",
+          "npx prisma generate --config=libs/database/prisma.config.ts",
+          "npx ts-node -T libs/database/prisma/seed.ts"
+        ],
+        "parallel": false
+      }
+    },
+    "db-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --config=libs/database/prisma.config.ts"
+      }
+    },
+    "db-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate --config=libs/database/prisma.config.ts"
+      }
+    },
+    "db-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -T libs/database/prisma/seed.ts"
+      }
+    },
+    "db-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma studio --config=libs/database/prisma.config.ts"
+      }
+    }
+  }
 }
