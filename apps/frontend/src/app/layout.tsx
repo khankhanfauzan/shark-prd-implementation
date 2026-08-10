@@ -12,7 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      {/* use 'antialiased' to control how font characters are rendered on the screen and smoothing the font */}
+      <body className='antialiased' >{children}</body>
     </html>
   )
 }

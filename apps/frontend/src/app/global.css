@@ -1,4 +1,10 @@
+@import "tailwindcss"; 
+/* please keep the `@import "tailwindcss";` always on top  */
 
+
+/* for testing the tailwindcss please comment the code below */
+
+/* 
     html {
       -webkit-text-size-adjust: 100%;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
@@ -387,4 +393,4 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
-  
+   */
