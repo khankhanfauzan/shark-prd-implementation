@@ -1,15 +1,8 @@
 import Link from 'next/link';
-import { ReviewSection } from '../../../components/mock/ReviewSection';
-import { MOCK_PRODUCT, MOCK_REVIEWS } from '../../../lib/mock-data';
+import { ReviewSection } from '../../components/mock/ReviewSection';
+import { MOCK_PRODUCT, MOCK_REVIEWS } from '../../lib/mock-data';
 
-type PageProps = {
-  params: Promise<{ id: string }>;
-};
-
-export default async function ProductDetailPage({ params }: PageProps) {
-  const { id } = await params;
-  const productId = id || MOCK_PRODUCT.id;
-
+export default function ProductPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-[var(--max)] px-4 py-8 sm:px-6 sm:py-12">
       <nav className="mb-8 text-sm text-[var(--ink-muted)]">
@@ -49,7 +42,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
       <div className="mt-10">
         <ReviewSection
-          productId={productId}
           average={MOCK_PRODUCT.averageRating}
           totalReviews={MOCK_PRODUCT.totalReviews}
           preview={MOCK_REVIEWS.slice(0, 2)}

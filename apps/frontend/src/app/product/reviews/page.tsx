@@ -1,25 +1,19 @@
 import Link from 'next/link';
-import { RatingSummary } from '../../../../components/mock/RatingSummary';
-import { ReviewCard } from '../../../../components/mock/ReviewCard';
-import { InfiniteScrollFooter } from '../../../../components/mock/ReviewStates';
-import { MOCK_PRODUCT, MOCK_REVIEWS } from '../../../../lib/mock-data';
-
-type PageProps = {
-  params: Promise<{ id: string }>;
-};
+import { RatingSummary } from '../../../components/mock/RatingSummary';
+import { ReviewCard } from '../../../components/mock/ReviewCard';
+import { InfiniteScrollFooter } from '../../../components/mock/ReviewStates';
+import { MOCK_PRODUCT, MOCK_REVIEWS } from '../../../lib/mock-data';
 
 /**
  * US-02 — Full Review Page (mock)
  * Infinite scroll = placeholder footer states (loading / end / error)
  * IntersectionObserver & cursor API digarap di task FE masing-masing.
  */
-export default async function ProductReviewsPage({ params }: PageProps) {
-  const { id } = await params;
-
+export default function ProductReviewsPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-[42rem] px-4 py-8 sm:px-6 sm:py-12">
       <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm text-[var(--ink-muted)]">
-        <Link href={`/products/${id}`} className="hover:text-[var(--ink)]">
+        <Link href="/product" className="hover:text-[var(--ink)]">
           ← Kembali ke produk
         </Link>
       </nav>

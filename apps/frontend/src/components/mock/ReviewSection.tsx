@@ -3,7 +3,6 @@ import { RatingSummary } from './RatingSummary';
 import { ReviewCard, type ReviewItem } from './ReviewCard';
 
 type ReviewSectionProps = {
-  productId: string;
   average: number;
   totalReviews: number;
   preview: ReviewItem[];
@@ -16,7 +15,6 @@ type ReviewSectionProps = {
  * - Tombol View More → Full Review Page
  */
 export function ReviewSection({
-  productId,
   average,
   totalReviews,
   preview,
@@ -46,7 +44,7 @@ export function ReviewSection({
 
       <div className="mt-6">
         <Link
-          href={`/products/${productId}/reviews`}
+          href="/product/reviews"
           className="inline-flex items-center justify-center border border-[var(--ink)] bg-[var(--ink)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--accent)] hover:border-[var(--accent)]"
         >
           View More
