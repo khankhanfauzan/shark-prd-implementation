@@ -16,13 +16,13 @@ export default function Index() {
 
       <div className="animate-fade-up-delay mt-10 flex flex-wrap gap-3">
         <Link
-          href="/products/demo"
+          href="/product"
           className="inline-flex items-center bg-[var(--ink)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--accent)]"
         >
           Buka PDP mockup
         </Link>
         <Link
-          href="/products/demo/reviews"
+          href="/product/reviews"
           className="inline-flex items-center border border-[var(--ink)] px-5 py-2.5 text-sm font-semibold transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
         >
           Full reviews
