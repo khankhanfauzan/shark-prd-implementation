@@ -1,12 +1,11 @@
 import { Injectable } from "@nestjs/common";
 
 import { PrismaService } from "../../../../libs/database/prisma/prisma.service";
-import type { RatingSummaryResponse } from "../types/RatingSummaryResponse";
 
 
 @Injectable()
 export class ProductRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async getProducts() {
     const result = await this.prisma.product.findMany({
@@ -20,5 +19,24 @@ export class ProductRepository {
     });
 
     return result;
+  }
+
+  // ambil produk + agregat rating (AVG & COUNT)
+  async getProductWithSummary() {
+    const product = await this.prisma.product.findFirst();
+
+    if (!product) return null;
+
+    const aggregate = await this.prisma.review.aggregate({
+      where: { productId: product.id },
+      _avg: { rating: true },
+      _count: true,
+    });
+
+    return {
+      product,
+      averageRating: aggregate._avg.rating,
+      totalReview: aggregate._count,
+    }
   }
 }
