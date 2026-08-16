@@ -18,7 +18,6 @@ async function bootstrap() {
     .setTitle('Shark PRD Implementation API')
     .setDescription('API documentation for Shark PRD Implementation')
     .setVersion('1.0')
-    .addTag('products')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
