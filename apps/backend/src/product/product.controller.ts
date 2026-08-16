@@ -3,10 +3,10 @@ import { ProductService } from './product.service';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Get('rating-summary')
   async getProductsRatingSummary() {
-    return this.productService.getProductsRatingSummary();
+    return this.productService.getRatingSummary();
   }
 }
