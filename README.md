@@ -29,55 +29,99 @@ Untuk pengalaman pengembangan terbaik dan eksekusi target 1-Click:
 
 ## ⚙️ Panduan Instalasi & Setup Aplikasi
 
-### 1. Clone Repository
+### Langkah 1: Clone Repository
 
 ```bash
-git clone [https://github.com/khankhanfauzan/shark-prd-implementation.git](https://github.com/khankhanfauzan/shark-prd-implementation.git)
+git clone https://github.com/khankhanfauzan/shark-prd-implementation.git
 cd shark-prd-implementation
-
 ```
 
-### 2. Instalasi Nx CLI Secara Global (Opsional)
+### Langkah 2: Instalasi Nx CLI Secara Global (Opsional)
 
 ```bash
 npm install -g nx
-
 ```
 
 > **Catatan**: Jika tidak menginstalnya secara global, gunakan perintah `npx nx` di setiap target.
 
-### 3. Install Dependencies
+### Langkah 3: Install Dependencies
 
 ```bash
 npm install
-
 ```
 
 ---
 
-## 🗄️ Setup Database & Environment (Automated)
+## 🗄️ Setup Database & Environment
 
-### Langkah 1: Konfigurasi Environment File (`.env`)
+### Langkah 4: Konfigurasi Environment File (`.env`)
 
-Duplikat file `.env.example` yang tersedia di root project menjadi `.env`:
+File `.env` **harus berada di root folder project** dan **tidak boleh di-commit ke Git** (sudah masuk `.gitignore`).
+
+Salin file `.env.example` sebagai titik awal:
 
 ```bash
 cp .env.example .env
-
 ```
 
-Buka file `.env` di root project dan sesuaikan kredensial PostgreSQL lokal Anda:
+Kemudian buka file `.env` dan sesuaikan `DATABASE_URL` dengan akun PostgreSQL lokal Anda:
 
 ```env
-DATABASE_URL="postgresql://postgres:password@localhost:5432/shark_db?schema=public"
-
+DATABASE_URL="postgresql://YOUR_PG_USERNAME@127.0.0.1:5432/shark_db?schema=public"
 ```
 
-> **Catatan:** Sesuaikan `postgres` dan `password` dengan username & password PostgreSQL lokal Anda.
+Untuk mengetahui username PostgreSQL Anda, jalankan di terminal:
+
+```bash
+# Mac / Linux
+whoami
+
+# Windows
+echo %USERNAME%
+```
 
 ---
 
-### Langkah 2: Menjalankan Automated Database Setup (1-Click / CLI)
+> ### ⚠️ Format `DATABASE_URL` yang Benar
+>
+> Perhatikan format koneksi PostgreSQL berdasarkan kondisi akun Anda:
+>
+> **Jika akun PostgreSQL Anda TIDAK memiliki password** (paling umum di setup lokal Mac/Linux):
+>
+> ```env
+> DATABASE_URL="postgresql://username@127.0.0.1:5432/shark_db?schema=public"
+> ```
+>
+> **Jika akun PostgreSQL Anda MEMILIKI password:**
+>
+> ```env
+> DATABASE_URL="postgresql://postgres:mypassword@127.0.0.1:5432/shark_db?schema=public"
+> ```
+>
+> ❌ **JANGAN** tambahkan tanda titik dua (`:`) setelah username jika tidak ada password, karena akan menyebabkan error koneksi:
+>
+> ```env
+> # SALAH — akan error "role does not exist" atau "password authentication failed"
+> DATABASE_URL="postgresql://username:@127.0.0.1:5432/shark_db?schema=public"
+> ```
+>
+> ---
+>
+> 💡 **`127.0.0.1` vs `localhost`**
+>
+> Gunakan `127.0.0.1` (bukan `localhost`) sebagai host. Keduanya mengarah ke mesin yang sama, tetapi perilakunya berbeda:
+>
+> | Host | Protokol | Keterangan |
+> |---|---|---|
+> | `127.0.0.1` | **TCP/IP** | Selalu koneksi via jaringan. Konsisten di semua OS. ✅ |
+> | `localhost` | **Unix Socket*** | Di Mac/Linux, PostgreSQL bisa menggunakan socket lokal yang bergantung pada konfigurasi `pg_hba.conf`. ⚠️ |
+>
+> Menggunakan `127.0.0.1` lebih aman dan konsisten, terutama saat project dikerjakan bersama di OS yang berbeda-beda.
+
+---
+
+
+### Langkah 5: Menjalankan Automated Database Setup (1-Click / CLI)
 
 Project ini telah dilengkapi **Auto-Database Creation Script**. Anda **tidak perlu** membuat database `shark_db` secara manual di DBeaver/psql. Script akan mendeteksi dan membuat database otomatis jika belum tersedia.
 
@@ -96,7 +140,6 @@ Jalankan satu perintah berikut dari direktori root:
 
 ```bash
 npx nx db-setup database
-
 ```
 
 > **Apa yang dilakukan oleh `db-setup` secara berurutan?**
@@ -127,7 +170,6 @@ nx run frontend:serve-with-backend
 # ATAU menjalankan masing-masing service di terminal terpisah:
 nx serve backend
 nx serve frontend
-
 ```
 
 ---
@@ -155,7 +197,6 @@ Jika Anda ingin menjalankan atau mereset database secara manual melalui DBeaver 
 CREATE DATABASE shark_db;
 ALTER DATABASE shark_db OWNER TO postgres;
 GRANT ALL PRIVILEGES ON DATABASE shark_db TO postgres;
-
 ```
 
 ---
@@ -177,13 +218,12 @@ shark-prd-implementation/
 │       ├── scripts/
 │       │   └── init-db.ts    # Script otomatis pembuatan database PostgreSQL
 │       ├── src/              # PrismaService & Export Library
-│       ├── tsconfig.lib.json # Konfigurasi TypeScript Library
 │       ├── prisma.config.ts  # Konfigurasi Prisma v7
 │       └── project.json      # Registrasi Target Nx Database
-├── .env.example           # Template variabel lingkungan
+├── .env                   # ⚠️ File ini TIDAK di-commit (ada di .gitignore)
+├── .env.example           # Template variabel lingkungan — SALIN ini ke .env
 ├── nx.json                # Konfigurasi workspace Nx
 └── package.json           # Dependencies root workspace
-
 ```
 
 ---
@@ -204,5 +244,34 @@ nx lint backend
 # Menjalankan unit test
 nx test frontend
 nx test backend
+```
 
+---
+
+## ❓ Troubleshooting Umum
+
+### Error: `role "username" does not exist`
+
+Ini terjadi karena `DATABASE_URL` menggunakan username yang tidak ada di PostgreSQL lokal Anda, **atau** terdapat file `.env` "siluman" di dalam folder `apps/backend/` yang menimpa konfigurasi root Anda (ini adalah sisa dari perintah `prisma init` yang dijalankan di dalam folder backend).
+
+**Solusi:**
+
+1. Pastikan Anda sudah membuat file `.env` di **root folder** dengan username yang benar.
+2. Pastikan **tidak ada** file `.env` di dalam `apps/backend/`. Hapus jika ada:
+   ```bash
+   rm apps/backend/.env
+   ```
+
+### Error: `password authentication failed` atau `SASL authentication`
+
+Terjadi jika Anda menambahkan tanda titik dua (`:`) setelah username padahal akun PostgreSQL Anda tidak memiliki password.
+
+**Solusi:** Hapus tanda `:` setelah username di `DATABASE_URL`:
+
+```env
+# Ubah dari (SALAH):
+DATABASE_URL="postgresql://username:@127.0.0.1:5432/shark_db?schema=public"
+
+# Menjadi (BENAR):
+DATABASE_URL="postgresql://username@127.0.0.1:5432/shark_db?schema=public"
 ```
