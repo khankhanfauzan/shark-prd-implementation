@@ -1,14 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-import { ReviewService } from './review.service';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewResponseDto } from './dto/review-response.dto';
+import { ReviewService } from './review.service';
 
 @ApiTags('Reviews')
 @Controller('product/reviews')
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) { }
+  constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -31,7 +30,19 @@ export class ReviewController {
   }
 
   @Get()
-  findAll() {
-    return this.reviewService.findAll();
+  @ApiOperation({ summary: 'Get paginated product reviews' })
+  @ApiResponse({
+    status: 200,
+    description: 'Product reviews retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Product not found',
+  })
+  findAll(
+    @Query('offset') offset = '0',
+    @Query('limit') limit = '10',
+  ) {
+    return this.reviewService.findAll(Number(offset), Number(limit));
   }
 }
