@@ -6,10 +6,18 @@
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Security: Helmet
+  app.use(helmet());
+
+  // Security: CORS
+  app.enableCors();
+
   const globalPrefix = 'api';
   const defaultVersion = '1';
   app.setGlobalPrefix(globalPrefix);
