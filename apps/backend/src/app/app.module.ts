@@ -4,6 +4,7 @@ import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductModule } from '../modules/product/product.module';
+import { ReviewModule } from '../modules/review/review.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ProductModule } from '../modules/product/product.module';
       envFilePath: path.join(process.cwd(), '.env'),
     }),
     ProductModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
