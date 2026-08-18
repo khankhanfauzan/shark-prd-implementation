@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewResponseDto } from './dto/review-response.dto';
 import { ReviewService } from './review.service';
@@ -7,7 +7,7 @@ import { ReviewService } from './review.service';
 @ApiTags('Reviews')
 @Controller('product/reviews')
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) {}
+  constructor(private readonly reviewService: ReviewService) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -31,6 +31,20 @@ export class ReviewController {
 
   @Get()
   @ApiOperation({ summary: 'Get paginated product reviews' })
+  @ApiQuery({
+    name: 'offset',
+    required: false,
+    type: Number,
+    description: 'Number of items to skip',
+    example: 0,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of items to return',
+    example: 10,
+  })
   @ApiResponse({
     status: 200,
     description: 'Product reviews retrieved successfully',
