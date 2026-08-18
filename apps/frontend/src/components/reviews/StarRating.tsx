@@ -1,3 +1,5 @@
+'use client';
+
 import { Star } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -6,6 +8,8 @@ type StarRatingProps = {
   value: number;
   max?: number;
   size?: 'sm' | 'md' | 'lg';
+  onChange?: (value: number) => void;
+  disabled?: boolean;
 };
 
 const sizeClass = {
@@ -14,20 +18,27 @@ const sizeClass = {
   lg: 'size-7',
 };
 
-/** US-01 slot — Star Rating visual (static mock) */
-export function StarRating({ value, max = 5, size = 'md' }: StarRatingProps) {
+export function StarRating({
+  value,
+  max = 5,
+  size = 'md',
+  onChange,
+  disabled = false,
+}: StarRatingProps) {
   const clamped = Math.max(0, Math.min(max, value));
+  const interactive = Boolean(onChange) && !disabled;
 
   return (
     <div
       className="inline-flex items-center gap-0.5"
-      role="img"
+      role={interactive ? 'radiogroup' : 'img'}
       aria-label={`Rating ${clamped.toFixed(1)} dari ${max} bintang`}
     >
       {Array.from({ length: max }, (_, i) => {
         const fill = Math.min(1, Math.max(0, clamped - i));
-        return (
-          <span key={i} className={cn('relative', sizeClass[size])}>
+        const starValue = i + 1;
+        const star = (
+          <span className={cn('relative', sizeClass[size])}>
             <Star
               className={cn(sizeClass[size], 'fill-star-empty text-star-empty')}
               aria-hidden
@@ -44,6 +55,24 @@ export function StarRating({ value, max = 5, size = 'md' }: StarRatingProps) {
               </span>
             )}
           </span>
+        );
+
+        if (!interactive) {
+          return <span key={i}>{star}</span>;
+        }
+
+        return (
+          <button
+            key={i}
+            type="button"
+            role="radio"
+            aria-checked={starValue === value}
+            aria-label={`${starValue} bintang`}
+            className="rounded-sm p-0.5 transition hover:scale-110 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            onClick={() => onChange?.(starValue)}
+          >
+            {star}
+          </button>
         );
       })}
     </div>

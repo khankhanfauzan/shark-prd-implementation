@@ -1,22 +1,17 @@
-import { StarRating } from '@/components/mock/StarRating';
+import { StarRating } from '@/components/reviews/StarRating';
 import { Separator } from '@/components/ui/separator';
+import { formatReviewDate } from '@/lib/format';
+import type { Review } from '@/lib/types';
 
-export type ReviewItem = {
-  id: string;
-  userName: string;
-  rating: number;
-  comment: string | null;
-  createdAt: string;
-};
-
-/** US-02 slot — Review card item */
-export function ReviewCard({ review }: { review: ReviewItem }) {
+export function ReviewCard({ review }: { review: Review }) {
   return (
     <article className="py-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="font-semibold">{review.userName}</p>
-          <p className="text-xs text-muted-foreground">{review.createdAt}</p>
+          <p className="font-semibold">{review.name}</p>
+          <p className="text-xs text-muted-foreground">
+            {formatReviewDate(review.createdAt)}
+          </p>
         </div>
         <StarRating value={review.rating} size="sm" />
       </div>

@@ -1,23 +1,17 @@
+'use client';
+
 import Link from 'next/link';
 
-import { RatingSummary } from '@/components/mock/RatingSummary';
-import { ReviewCard } from '@/components/mock/ReviewCard';
-import { InfiniteScrollFooter } from '@/components/mock/ReviewStates';
+import { ReviewFeed } from '@/components/reviews/ReviewFeed';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { MOCK_PRODUCT, MOCK_REVIEWS } from '@/lib/mock-data';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useProducts } from '@/hooks/use-product-queries';
 
-/**
- * US-02 — Full Review Page (mock)
- * Infinite scroll digarap di task FE masing-masing.
- */
 export default function ProductReviewsPage() {
+  const { data, isPending } = useProducts();
+  const product = data?.[0];
+
   return (
     <main className="mx-auto min-h-screen w-full max-w-[42rem] px-4 py-8 sm:px-6 sm:py-12">
       <nav className="mb-8">
@@ -30,36 +24,19 @@ export default function ProductReviewsPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
           Full reviews
         </p>
-        <h1 className="mt-2 font-serif text-3xl">{MOCK_PRODUCT.name}</h1>
+        {isPending ? (
+          <Skeleton className="mt-2 h-9 w-2/3" />
+        ) : (
+          <h1 className="mt-2 font-serif text-3xl">
+            {product?.name ?? 'Produk'}
+          </h1>
+        )}
       </header>
 
       <Card className="animate-fade-up-delay shadow-sm">
         <CardContent className="pt-6">
-          <RatingSummary
-            average={MOCK_PRODUCT.averageRating}
-            totalReviews={MOCK_PRODUCT.totalReviews}
-          />
-          <div>
-            {MOCK_REVIEWS.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
-          </div>
-          <div data-scroll-sentinel>
-            <InfiniteScrollFooter state="end" />
-          </div>
+          <ReviewFeed />
         </CardContent>
-      </Card>
-
-      <Card className="mt-8 border-dashed shadow-none">
-        <CardHeader>
-          <CardTitle className="text-base">Slot FE (belum diikat API)</CardTitle>
-          <CardDescription>Task lanjutan untuk anggota FE:</CardDescription>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-            <li>Infinite scroll + IntersectionObserver</li>
-            <li>Cursor pagination dari BE</li>
-            <li>State loading / error / retry di footer</li>
-          </ul>
-        </CardHeader>
       </Card>
     </main>
   );

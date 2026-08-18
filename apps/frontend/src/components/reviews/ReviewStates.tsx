@@ -1,9 +1,10 @@
+'use client';
+
 import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
-/** US-01 / US-02 — loading & footer states */
 export function RatingSkeleton() {
   return (
     <div className="flex gap-4 pb-6" aria-hidden>
@@ -29,10 +30,33 @@ export function ReviewCardSkeleton() {
   );
 }
 
+export function QueryErrorState({
+  message,
+  onRetry,
+}: {
+  message?: string;
+  onRetry?: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-3 py-8" role="alert">
+      <p className="text-sm text-destructive">
+        {message || 'Gagal memuat data.'}
+      </p>
+      {onRetry ? (
+        <Button type="button" variant="outline" size="sm" onClick={onRetry}>
+          Coba Lagi
+        </Button>
+      ) : null}
+    </div>
+  );
+}
+
 export function InfiniteScrollFooter({
   state,
+  onRetry,
 }: {
   state: 'loading' | 'end' | 'error';
+  onRetry?: () => void;
 }) {
   if (state === 'loading') {
     return (
@@ -45,12 +69,7 @@ export function InfiniteScrollFooter({
 
   if (state === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 py-8" role="alert">
-        <p className="text-sm text-destructive">Gagal memuat ulasan.</p>
-        <Button type="button" variant="outline" size="sm">
-          Coba Lagi
-        </Button>
-      </div>
+      <QueryErrorState message="Gagal memuat ulasan." onRetry={onRetry} />
     );
   }
 

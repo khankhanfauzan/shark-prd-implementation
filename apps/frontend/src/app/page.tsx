@@ -12,22 +12,22 @@ export default function Index() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-[var(--max)] flex-col justify-center px-4 py-16 sm:px-6">
       <p className="animate-fade-up text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-        SHARK · FE mockup · shadcn/ui
+        SHARK · Product Reviews
       </p>
       <h1 className="animate-fade-up mt-3 max-w-xl font-serif text-4xl sm:text-5xl">
         Product Review & Rating
       </h1>
       <p className="animate-fade-up-delay mt-4 max-w-lg leading-relaxed text-muted-foreground">
-        Kerangka tampilan untuk PDP dan halaman ulasan memakai shadcn/ui.
-        Tiap anggota FE mengisi slot fitur masing-masing.
+        Halaman produk dan ulasan terhubung ke API NestJS: list review,
+        infinite scroll, dan form submit ulasan.
       </p>
 
       <div className="animate-fade-up-delay mt-10 flex flex-wrap gap-3">
         <Button asChild>
-          <Link href="/product">Buka PDP mockup</Link>
+          <Link href="/product">Buka halaman produk</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/product/reviews">Full reviews</Link>
+          <Link href="/product/reviews">Semua ulasan</Link>
         </Button>
       </div>
 
@@ -38,8 +38,7 @@ export default function Index() {
               US-01 · Overall Rating
             </CardTitle>
             <CardDescription>
-              StarRating, angka desimal, empty/skeleton state di Review Section
-              PDP.
+              Ringkasan rating dari API, star visual, empty & loading state.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -49,7 +48,8 @@ export default function Index() {
               US-02 · Review List
             </CardTitle>
             <CardDescription>
-              View More, ReviewCard, infinite scroll, loading / end / retry.
+              Preview di PDP, halaman penuh dengan infinite scroll, dan form
+              ulasan.
             </CardDescription>
           </CardHeader>
         </Card>

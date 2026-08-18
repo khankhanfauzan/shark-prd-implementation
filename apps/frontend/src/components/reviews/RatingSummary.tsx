@@ -1,4 +1,4 @@
-import { StarRating } from '@/components/mock/StarRating';
+import { StarRating } from '@/components/reviews/StarRating';
 import { Separator } from '@/components/ui/separator';
 
 type RatingSummaryProps = {
@@ -7,13 +7,12 @@ type RatingSummaryProps = {
   empty?: boolean;
 };
 
-/** US-01 slot — Overall rating summary */
 export function RatingSummary({
   average,
   totalReviews,
   empty = false,
 }: RatingSummaryProps) {
-  if (empty) {
+  if (empty || totalReviews === 0) {
     return (
       <div className="space-y-2 pb-6">
         <StarRating value={0} size="lg" />
