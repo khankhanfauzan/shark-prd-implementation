@@ -111,15 +111,14 @@ echo %USERNAME%
 >
 > Gunakan `127.0.0.1` (bukan `localhost`) sebagai host. Keduanya mengarah ke mesin yang sama, tetapi perilakunya berbeda:
 >
-> | Host | Protokol | Keterangan |
-> |---|---|---|
-> | `127.0.0.1` | **TCP/IP** | Selalu koneksi via jaringan. Konsisten di semua OS. ✅ |
-> | `localhost` | **Unix Socket*** | Di Mac/Linux, PostgreSQL bisa menggunakan socket lokal yang bergantung pada konfigurasi `pg_hba.conf`. ⚠️ |
+> | Host        | Protokol          | Keterangan                                                                                                |
+> | ----------- | ----------------- | --------------------------------------------------------------------------------------------------------- |
+> | `127.0.0.1` | **TCP/IP**        | Selalu koneksi via jaringan. Konsisten di semua OS. ✅                                                    |
+> | `localhost` | **Unix Socket\*** | Di Mac/Linux, PostgreSQL bisa menggunakan socket lokal yang bergantung pada konfigurasi `pg_hba.conf`. ⚠️ |
 >
 > Menggunakan `127.0.0.1` lebih aman dan konsisten, terutama saat project dikerjakan bersama di OS yang berbeda-beda.
 
 ---
-
 
 ### Langkah 5: Menjalankan Automated Database Setup (1-Click / CLI)
 
@@ -198,6 +197,24 @@ CREATE DATABASE shark_db;
 ALTER DATABASE shark_db OWNER TO postgres;
 GRANT ALL PRIVILEGES ON DATABASE shark_db TO postgres;
 ```
+
+---
+
+## 🌟 Fitur & Modul Terimplementasi
+
+Project ini telah menyelesaikan fase implementasi backend untuk modul **Product Detail & Review**:
+
+### 1. [Backend (NestJS)](apps/backend/README.md)
+
+- **Product Module**: API untuk mengambil data produk dan ringkasan rating.
+- **Review Module**: API untuk submit ulasan baru dan list ulasan terpaginasi.
+- **Swagger Documentation**: Dokumentasi API interaktif di `/api/docs`.
+
+### 2. [Database Library (Prisma)](libs/database/README.md)
+
+- **Skema Prisma**: Mendefinisikan model `Product` dan `Review`.
+- **Auto-Setup**: Script otomatis untuk inisialisasi database PostgreSQL.
+- **ERD Visual**: Visualisasi hubungan database menggunakan Mermaid.
 
 ---
 
