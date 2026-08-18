@@ -1,9 +1,18 @@
 //@ts-check
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Next.js options go here
-  // See: https://nextjs.org/docs/app/api-reference/config/next-config-js
+  // Ensure `@/*` resolves to `src/*` in this Nx app
+  turbopack: {
+    resolveAlias: {
+      '@': path.join(__dirname, 'src'),
+    },
+  },
+  webpack: (config) => {
+    config.resolve.alias['@'] = path.join(__dirname, 'src');
+    return config;
+  },
 };
 
 module.exports = nextConfig;
