@@ -8,7 +8,12 @@ export class ProductRepository {
     async findAll() {
         return this.prisma.product.findMany({
             include: {
-                reviews: true,
+                reviews: {
+                    take: 5,
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                },
             },
         });
     }
