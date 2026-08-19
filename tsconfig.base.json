@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "strict": false,
     "paths": {
+      "@/*": ["./apps/frontend/src/*"],
       "database": ["./libs/database/src/index.ts"]
     }
   },

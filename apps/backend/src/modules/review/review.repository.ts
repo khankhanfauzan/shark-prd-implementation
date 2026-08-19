@@ -28,9 +28,10 @@ export class ReviewRepository {
       where: { productId },
       skip: offset,
       take: limit,
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        { createdAt: 'desc' },
+        { id: 'desc' },
+      ],
     });
   }
 
