@@ -6,6 +6,7 @@ import { RatingSummary } from '@/components/reviews/RatingSummary';
 import { ReviewCard } from '@/components/reviews/ReviewCard';
 import { ReviewForm } from '@/components/reviews/ReviewForm';
 import {
+  EmptyReviewsState,
   InfiniteScrollFooter,
   QueryErrorState,
   RatingSkeleton,
@@ -75,19 +76,18 @@ export function ReviewFeed() {
 
   return (
     <>
-      <RatingSummary
-        average={summaryQuery.data?.averageRating ?? 0}
-        totalReviews={summaryQuery.data?.totalReviews ?? 0}
-      />
-
       {reviews.length === 0 ? (
-        <p className="py-6 text-sm text-muted-foreground">
-          Belum ada ulasan untuk produk ini.
-        </p>
+        <EmptyReviewsState />
       ) : (
-        reviews.map((review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))
+        <>
+          <RatingSummary
+            average={summaryQuery.data?.averageRating ?? 0}
+            totalReviews={summaryQuery.data?.totalReviews ?? 0}
+          />
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))}
+        </>
       )}
 
       <div ref={sentinelRef} data-scroll-sentinel>

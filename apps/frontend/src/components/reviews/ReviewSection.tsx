@@ -6,6 +6,7 @@ import { RatingSummary } from '@/components/reviews/RatingSummary';
 import { ReviewCard } from '@/components/reviews/ReviewCard';
 import { ReviewForm } from '@/components/reviews/ReviewForm';
 import {
+  EmptyReviewsState,
   QueryErrorState,
   RatingSkeleton,
   ReviewCardSkeleton,
@@ -60,21 +61,19 @@ export function ReviewSection() {
             }}
           />
         ) : (
-          <>
-            <RatingSummary
-              average={summary?.averageRating ?? 0}
-              totalReviews={summary?.totalReviews ?? 0}
-            />
-            {preview.length === 0 ? (
-              <p className="py-6 text-sm text-muted-foreground">
-                Jadilah yang pertama menulis ulasan.
-              </p>
-            ) : (
-              preview.map((review) => (
+          preview.length === 0 ? (
+            <EmptyReviewsState />
+          ) : (
+            <>
+              <RatingSummary
+                average={summary?.averageRating ?? 0}
+                totalReviews={summary?.totalReviews ?? 0}
+              />
+              {preview.map((review) => (
                 <ReviewCard key={review.id} review={review} />
-              ))
-            )}
-          </>
+              ))}
+            </>
+          )
         )}
 
         <div className="pt-4">
@@ -82,11 +81,13 @@ export function ReviewSection() {
         </div>
       </CardContent>
 
-      <CardFooter>
-        <Button asChild>
-          <Link href="/product/reviews">View More</Link>
-        </Button>
-      </CardFooter>
+      {preview.length > 0 ? (
+        <CardFooter>
+          <Button asChild>
+            <Link href="/product/reviews">View More</Link>
+          </Button>
+        </CardFooter>
+      ) : null}
     </Card>
   );
 }

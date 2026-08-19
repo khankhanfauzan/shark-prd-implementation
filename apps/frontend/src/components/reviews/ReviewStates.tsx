@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Loader2, MessageSquareDashed } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -26,6 +26,33 @@ export function ReviewCardSkeleton() {
       </div>
       <Skeleton className="h-4 w-full" />
       <Skeleton className="h-4 w-[80%]" />
+    </div>
+  );
+}
+
+export function EmptyReviewsState({
+  writeReviewHref = '#write-review',
+}: {
+  writeReviewHref?: string;
+}) {
+  return (
+    <div
+      className="flex flex-col items-center gap-4 rounded-lg border border-dashed border-border bg-muted/40 px-4 py-10 text-center"
+      role="status"
+      aria-live="polite"
+    >
+      <div className="flex size-12 items-center justify-center rounded-full bg-accent text-accent-foreground">
+        <MessageSquareDashed className="size-6" aria-hidden />
+      </div>
+      <div className="space-y-1">
+        <p className="font-serif text-xl">No Reviews Yet</p>
+        <p className="max-w-sm text-sm text-muted-foreground">
+          Jadilah yang pertama menulis ulasan untuk produk ini.
+        </p>
+      </div>
+      <Button asChild variant="outline" size="sm">
+        <a href={writeReviewHref}>Tulis ulasan</a>
+      </Button>
     </div>
   );
 }

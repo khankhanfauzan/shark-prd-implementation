@@ -63,8 +63,9 @@ export function ReviewForm() {
   return (
     <Form {...form}>
       <form
+        id="write-review"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 rounded-lg border border-dashed border-border bg-background/60 p-4"
+        className="space-y-4 rounded-lg border border-dashed border-border bg-background/60 p-4 scroll-mt-6"
       >
         <div>
           <p className="font-serif text-lg font-semibold">Tulis ulasan</p>
