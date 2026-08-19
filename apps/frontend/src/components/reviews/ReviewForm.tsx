@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,42 +20,60 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useCreateReview } from '@/hooks/use-product-queries';
 
+const DESCRIPTION_MAX = 1000;
+const NAME_MAX = 255;
+
 const reviewSchema = z.object({
   name: z
     .string()
     .trim()
     .min(1, 'Nama wajib diisi')
-    .max(255, 'Nama maksimal 255 karakter'),
+    .max(NAME_MAX, `Nama maksimal ${NAME_MAX} karakter`),
   rating: z
     .number()
     .int('Rating harus bilangan bulat')
-    .min(1, 'Pilih rating 1–5')
+    .min(1, 'Rating wajib diisi')
     .max(5, 'Rating maksimal 5'),
-  comment: z.string().max(1000, 'Komentar maksimal 1000 karakter').optional(),
+  description: z
+    .string()
+    .max(DESCRIPTION_MAX, `Deskripsi maksimal ${DESCRIPTION_MAX} karakter`)
+    .optional(),
 });
 
 type ReviewFormValues = z.infer<typeof reviewSchema>;
+
+function RequiredMark() {
+  return (
+    <span className="text-destructive" aria-hidden>
+      {' '}
+      *
+    </span>
+  );
+}
 
 export function ReviewForm() {
   const createReview = useCreateReview();
   const form = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewSchema),
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
     defaultValues: {
       name: '',
       rating: 0,
-      comment: '',
+      description: '',
     },
   });
 
   async function onSubmit(values: ReviewFormValues) {
-    const comment = values.comment?.trim();
+    const description = values.description?.trim();
+    createReview.reset();
     try {
       await createReview.mutateAsync({
         name: values.name,
         rating: values.rating,
-        ...(comment ? { comment } : {}),
+        ...(description ? { comment: description } : {}),
       });
-      form.reset({ name: '', rating: 0, comment: '' });
+      form.reset({ name: '', rating: 0, description: '' });
     } catch {
       // Error surface via createReview.isError
     }
@@ -64,13 +83,14 @@ export function ReviewForm() {
     <Form {...form}>
       <form
         id="write-review"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 rounded-lg border border-dashed border-border bg-background/60 p-4 scroll-mt-6"
+        className="space-y-5 rounded-xl border bg-muted/30 p-5 scroll-mt-6"
       >
-        <div>
-          <p className="font-serif text-lg font-semibold">Tulis ulasan</p>
+        <div className="space-y-1">
+          <p className="font-serif text-lg font-semibold">Kirim ulasan</p>
           <p className="text-sm text-muted-foreground">
-            Nama dan rating wajib. Komentar opsional.
+            Nama dan rating wajib diisi. Deskripsi bersifat opsional.
           </p>
         </div>
 
@@ -79,9 +99,19 @@ export function ReviewForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nama</FormLabel>
+              <FormLabel>
+                Nama
+                <RequiredMark />
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Nama Anda" autoComplete="name" {...field} />
+                <Input
+                  placeholder="Nama Anda"
+                  autoComplete="name"
+                  maxLength={NAME_MAX}
+                  aria-required="true"
+                  disabled={createReview.isPending}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,18 +121,30 @@ export function ReviewForm() {
         <FormField
           control={form.control}
           name="rating"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel>Rating</FormLabel>
+              <FormLabel>
+                Rating
+                <RequiredMark />
+              </FormLabel>
               <FormControl>
-                <div>
-                  <StarRating
-                    value={field.value}
-                    onChange={field.onChange}
-                    disabled={createReview.isPending}
-                  />
-                </div>
+                <StarRating
+                  value={field.value}
+                  size="lg"
+                  invalid={fieldState.invalid}
+                  disabled={createReview.isPending}
+                  onChange={(value) => {
+                    field.onChange(value);
+                    void form.trigger('rating');
+                  }}
+                  onBlur={field.onBlur}
+                />
               </FormControl>
+              <FormDescription>
+                {field.value >= 1
+                  ? `${field.value} dari 5 bintang`
+                  : 'Pilih 1 sampai 5 bintang'}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -110,20 +152,34 @@ export function ReviewForm() {
 
         <FormField
           control={form.control}
-          name="comment"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Komentar (opsional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Bagaimana pengalaman Anda?"
-                  maxLength={1000}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          name="description"
+          render={({ field }) => {
+            const length = field.value?.length ?? 0;
+            return (
+              <FormItem>
+                <FormLabel>
+                  Deskripsi
+                  <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                    (opsional)
+                  </span>
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Ceritakan pengalaman Anda memakai produk ini"
+                    maxLength={DESCRIPTION_MAX}
+                    disabled={createReview.isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <div className="flex items-start justify-between gap-3">
+                  <FormMessage />
+                  <p className="ml-auto text-[0.8rem] text-muted-foreground">
+                    {length}/{DESCRIPTION_MAX}
+                  </p>
+                </div>
+              </FormItem>
+            );
+          }}
         />
 
         {createReview.isError ? (
@@ -138,7 +194,11 @@ export function ReviewForm() {
           </p>
         ) : null}
 
-        <Button type="submit" disabled={createReview.isPending}>
+        <Button
+          type="submit"
+          className="w-full sm:w-auto"
+          disabled={createReview.isPending}
+        >
           {createReview.isPending ? (
             <>
               <Loader2 className="animate-spin" />
