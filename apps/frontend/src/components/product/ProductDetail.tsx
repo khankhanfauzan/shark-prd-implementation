@@ -17,7 +17,7 @@ export function ProductDetail() {
   if (isPending) {
     return (
       <section className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <Skeleton className="aspect-[4/3] w-full rounded-xl" />
+        <Skeleton className="aspect-square w-full rounded-xl" />
         <div className="flex flex-col justify-center gap-4">
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-10 w-3/4" />
