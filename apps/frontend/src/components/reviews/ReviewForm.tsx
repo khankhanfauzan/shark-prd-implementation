@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { StarRating } from '@/components/reviews/StarRating';
+import { StarRatingInput } from '@/components/reviews/StarRatingInput';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -128,11 +128,13 @@ export function ReviewForm() {
                 <RequiredMark />
               </FormLabel>
               <FormControl>
-                <StarRating
+                <StarRatingInput
                   value={field.value}
                   size="lg"
                   invalid={fieldState.invalid}
                   disabled={createReview.isPending}
+                  required
+                  name={field.name}
                   onChange={(value) => {
                     field.onChange(value);
                     void form.trigger('rating');

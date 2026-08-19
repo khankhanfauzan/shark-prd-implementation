@@ -1,102 +1,71 @@
 'use client';
 
-import * as React from 'react';
 import { Star } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-type StarRatingProps = {
-  value: number;
-  max?: number;
-  size?: 'sm' | 'md' | 'lg';
-  onChange?: (value: number) => void;
-  disabled?: boolean;
-  invalid?: boolean;
-} & Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>;
-
-const sizeClass = {
+export const starSizeClass = {
   sm: 'size-3.5',
   md: 'size-5',
   lg: 'size-7',
+} as const;
+
+export type StarSize = keyof typeof starSizeClass;
+
+export function StarGlyph({
+  fill,
+  size = 'md',
+}: {
+  fill: number;
+  size?: StarSize;
+}) {
+  const clamped = Math.max(0, Math.min(1, fill));
+
+  return (
+    <span className={cn('relative', starSizeClass[size])}>
+      <Star
+        className={cn(starSizeClass[size], 'fill-star-empty text-star-empty')}
+        aria-hidden
+      />
+      {clamped > 0 && (
+        <span
+          className="absolute inset-0 overflow-hidden"
+          style={{ width: `${clamped * 100}%` }}
+        >
+          <Star
+            className={cn(starSizeClass[size], 'fill-star text-star')}
+            aria-hidden
+          />
+        </span>
+      )}
+    </span>
+  );
+}
+
+type StarRatingProps = {
+  value: number;
+  max?: number;
+  size?: StarSize;
+  className?: string;
 };
 
-export const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
-  function StarRating(
-    {
-      value,
-      max = 5,
-      size = 'md',
-      onChange,
-      disabled = false,
-      invalid = false,
-      className,
-      ...props
-    },
-    ref
-  ) {
-    const clamped = Math.max(0, Math.min(max, value));
-    const interactive = Boolean(onChange) && !disabled;
+export function StarRating({
+  value,
+  max = 5,
+  size = 'md',
+  className,
+}: StarRatingProps) {
+  const clamped = Math.max(0, Math.min(max, value));
 
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'inline-flex items-center gap-0.5 rounded-md',
-          invalid && 'ring-1 ring-destructive',
-          className
-        )}
-        role={interactive ? 'radiogroup' : 'img'}
-        aria-label={`Rating ${clamped.toFixed(1)} dari ${max} bintang`}
-        aria-required={interactive || undefined}
-        aria-invalid={invalid || undefined}
-        {...props}
-      >
-        {Array.from({ length: max }, (_, i) => {
-          const fill = Math.min(1, Math.max(0, clamped - i));
-          const starValue = i + 1;
-          const star = (
-            <span className={cn('relative', sizeClass[size])}>
-              <Star
-                className={cn(
-                  sizeClass[size],
-                  'fill-star-empty text-star-empty'
-                )}
-                aria-hidden
-              />
-              {fill > 0 && (
-                <span
-                  className="absolute inset-0 overflow-hidden"
-                  style={{ width: `${fill * 100}%` }}
-                >
-                  <Star
-                    className={cn(sizeClass[size], 'fill-star text-star')}
-                    aria-hidden
-                  />
-                </span>
-              )}
-            </span>
-          );
-
-          if (!interactive) {
-            return <span key={i}>{star}</span>;
-          }
-
-          return (
-            <button
-              key={i}
-              type="button"
-              role="radio"
-              aria-checked={starValue === value}
-              aria-label={`${starValue} bintang`}
-              className="rounded-sm p-0.5 transition hover:scale-110 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50"
-              disabled={disabled}
-              onClick={() => onChange?.(starValue)}
-            >
-              {star}
-            </button>
-          );
-        })}
-      </div>
-    );
-  }
-);
+  return (
+    <div
+      className={cn('inline-flex items-center gap-0.5', className)}
+      role="img"
+      aria-label={`Rating ${clamped.toFixed(1)} dari ${max} bintang`}
+    >
+      {Array.from({ length: max }, (_, i) => (
+        <StarGlyph key={i} size={size} fill={Math.min(1, Math.max(0, clamped - i))} />
+      ))}
+    </div>
+  );
+}
