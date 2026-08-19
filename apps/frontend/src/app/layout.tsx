@@ -1,6 +1,8 @@
 import './global.css';
 import { Literata, Manrope } from 'next/font/google';
 
+import { Providers } from './providers';
+
 const display = Literata({
   subsets: ['latin'],
   variable: '--font-display',
@@ -15,7 +17,7 @@ const body = Manrope({
 
 export const metadata = {
   title: 'SHARK · Product Reviews',
-  description: 'FE mockup — Product Detail Page & Review System',
+  description: 'Product Detail Page & Review System',
 };
 
 export default function RootLayout({
@@ -25,7 +27,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${display.variable} ${body.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
