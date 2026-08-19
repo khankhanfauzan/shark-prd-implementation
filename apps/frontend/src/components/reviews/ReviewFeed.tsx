@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 import { RatingSummary } from '@/components/reviews/RatingSummary';
 import { ReviewCard } from '@/components/reviews/ReviewCard';
@@ -17,33 +17,27 @@ import {
   useReviewsInfinite,
 } from '@/hooks/use-product-queries';
 
+const PAGE_SIZE = 10;
+
 export function ReviewFeed() {
   const summaryQuery = useRatingSummary();
-  const reviewsQuery = useReviewsInfinite(10);
+  const reviewsQuery = useReviewsInfinite(PAGE_SIZE);
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = reviewsQuery;
-  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const reviews =
     reviewsQuery.data?.pages.flatMap((page) => page.data) ?? [];
+  const isNextPageError = reviewsQuery.isFetchNextPageError;
+  const canLoadMore = Boolean(hasNextPage) && reviews.length > 0;
 
-  useEffect(() => {
-    const node = sentinelRef.current;
-    if (!node) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          void fetchNextPage();
-        }
-      },
-      { rootMargin: '240px' }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  const [sentryRef] = useInfiniteScroll({
+    loading: isFetchingNextPage,
+    hasNextPage: canLoadMore,
+    onLoadMore: () => {
+      void fetchNextPage();
+    },
+    disabled: isNextPageError && !isFetchingNextPage,
+    rootMargin: '0px 0px 240px 0px',
+  });
 
   if (reviewsQuery.isPending || summaryQuery.isPending) {
     return (
@@ -68,12 +62,6 @@ export function ReviewFeed() {
     );
   }
 
-  const footerState = isFetchingNextPage
-    ? 'loading'
-    : reviewsQuery.isFetchNextPageError
-      ? 'error'
-      : 'end';
-
   return (
     <>
       {reviews.length === 0 ? (
@@ -90,14 +78,27 @@ export function ReviewFeed() {
         </>
       )}
 
-      <div ref={sentinelRef} data-scroll-sentinel>
-        {reviews.length > 0 ? (
+      {reviews.length > 0 ? (
+        isFetchingNextPage ? (
+          <div ref={sentryRef} data-scroll-sentry>
+            <InfiniteScrollFooter state="loading" />
+          </div>
+        ) : isNextPageError ? (
           <InfiniteScrollFooter
-            state={footerState}
-            onRetry={() => void reviewsQuery.fetchNextPage()}
+            state="error"
+            onRetry={() => void fetchNextPage()}
           />
-        ) : null}
-      </div>
+        ) : canLoadMore ? (
+          <div
+            ref={sentryRef}
+            data-scroll-sentry
+            className="h-1 w-full"
+            aria-hidden
+          />
+        ) : (
+          <InfiniteScrollFooter state="end" />
+        )
+      ) : null}
 
       <div className="pt-2">
         <ReviewForm />
