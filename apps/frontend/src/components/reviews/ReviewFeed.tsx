@@ -8,6 +8,7 @@ import { ReviewForm } from '@/components/reviews/ReviewForm';
 import {
   EmptyReviewsState,
   InfiniteScrollFooter,
+  NextPageSpinner,
   QueryErrorState,
   RatingSkeleton,
   ReviewCardSkeleton,
@@ -79,22 +80,19 @@ export function ReviewFeed() {
       )}
 
       {reviews.length > 0 ? (
-        isFetchingNextPage ? (
-          <div ref={sentryRef} data-scroll-sentry>
-            <InfiniteScrollFooter state="loading" />
-          </div>
-        ) : isNextPageError ? (
+        isNextPageError && !isFetchingNextPage ? (
           <InfiniteScrollFooter
             state="error"
             onRetry={() => void fetchNextPage()}
           />
-        ) : canLoadMore ? (
+        ) : canLoadMore || isFetchingNextPage ? (
           <div
             ref={sentryRef}
             data-scroll-sentry
-            className="h-1 w-full"
-            aria-hidden
-          />
+            className={isFetchingNextPage ? undefined : 'h-1'}
+          >
+            {isFetchingNextPage ? <NextPageSpinner /> : null}
+          </div>
         ) : (
           <InfiniteScrollFooter state="end" />
         )

@@ -78,6 +78,20 @@ export function QueryErrorState({
   );
 }
 
+export function NextPageSpinner() {
+  return (
+    <div
+      className="flex flex-col items-center justify-center gap-3 py-8"
+      role="status"
+      aria-live="polite"
+      aria-label="Memuat ulasan berikutnya"
+    >
+      <Loader2 className="size-8 animate-spin text-primary" />
+      <p className="text-sm text-muted-foreground">Memuat ulasan…</p>
+    </div>
+  );
+}
+
 export function InfiniteScrollFooter({
   state,
   onRetry,
@@ -86,12 +100,7 @@ export function InfiniteScrollFooter({
   onRetry?: () => void;
 }) {
   if (state === 'loading') {
-    return (
-      <div className="flex flex-col items-center gap-3 py-8" aria-live="polite">
-        <Loader2 className="size-6 animate-spin text-primary" />
-        <p className="text-sm text-muted-foreground">Memuat ulasan…</p>
-      </div>
-    );
+    return <NextPageSpinner />;
   }
 
   if (state === 'error') {
