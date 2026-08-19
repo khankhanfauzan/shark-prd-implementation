@@ -83,7 +83,7 @@ export function ReviewSection() {
 
       {preview.length > 0 ? (
         <CardFooter>
-          <Button asChild>
+          <Button asChild className="!text-white">
             <Link href="/product/reviews">View More</Link>
           </Button>
         </CardFooter>
