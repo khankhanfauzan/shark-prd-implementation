@@ -2,9 +2,8 @@
 
 import Link from 'next/link';
 
+import { EditorialShell } from '@/components/layout/EditorialShell';
 import { ReviewFeed } from '@/components/reviews/ReviewFeed';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProducts } from '@/hooks/use-product-queries';
 
@@ -13,31 +12,32 @@ export default function ProductReviewsPage() {
   const product = data?.[0];
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-[42rem] px-4 py-8 sm:px-6 sm:py-12">
-      <nav className="mb-8">
-        <Button asChild variant="ghost" size="sm" className="-ml-2">
-          <Link href="/product">← Kembali ke produk</Link>
-        </Button>
-      </nav>
-
-      <header className="animate-fade-up mb-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+    <EditorialShell>
+      <header className="animate-fade-up mb-10">
+        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-primary">
           Full reviews
         </p>
+        <h1 className="mt-3 font-editorial text-[clamp(3rem,8vw,5.4rem)] font-medium leading-[0.88] tracking-[-0.045em]">
+          Voices
+          <br />
+          <em className="italic text-primary">on record.</em>
+        </h1>
         {isPending ? (
-          <Skeleton className="mt-2 h-9 w-2/3" />
+          <Skeleton className="mt-4 h-5 w-64" />
         ) : (
-          <h1 className="mt-2 font-serif text-3xl">
-            {product?.name ?? 'Produk'}
-          </h1>
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+            Semua ulasan untuk{' '}
+            <Link href="/product" className="text-foreground underline-offset-4 hover:underline">
+              {product?.name ?? 'produk ini'}
+            </Link>
+            .
+          </p>
         )}
       </header>
 
-      <Card className="animate-fade-up-delay shadow-sm">
-        <CardContent className="pt-6">
-          <ReviewFeed />
-        </CardContent>
-      </Card>
-    </main>
+      <div className="animate-fade-up-delay">
+        <ReviewFeed />
+      </div>
+    </EditorialShell>
   );
 }
