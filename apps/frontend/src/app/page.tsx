@@ -3,7 +3,7 @@ import { Cormorant_Garamond } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
+import { EditorialNav } from '@/components/layout/EditorialNav';
 import { cn } from '@/lib/utils';
 
 import styles from './page.module.css';
@@ -24,20 +24,7 @@ export default function Index() {
       <div className={styles.grain} aria-hidden />
 
       <div className={styles.inner}>
-        <header className={styles.nav}>
-          <div className={styles.brand}>
-            <span className={styles.mark}>Shark</span>
-            <span className={styles.issue}>Review issue 01</span>
-          </div>
-          <nav className={styles.links} aria-label="Utama">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/product">Produk</Link>
-            </Button>
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/product/reviews">Ulasan</Link>
-            </Button>
-          </nav>
-        </header>
+        <EditorialNav className={styles.nav} />
 
         <section className={styles.hero}>
           <div className={styles.copy}>
