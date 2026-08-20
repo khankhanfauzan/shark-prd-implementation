@@ -66,7 +66,7 @@ export function ProductDetail() {
       </section>
 
       <div className="mt-10">
-        <ReviewSection />
+        <ReviewSection reviews={product.reviews ?? []} />
       </div>
     </>
   );
