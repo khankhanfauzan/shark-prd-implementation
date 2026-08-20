@@ -22,7 +22,7 @@ export function StarGlyph({
   const clamped = Math.max(0, Math.min(1, fill));
 
   return (
-    <span className={cn('relative', starSizeClass[size])}>
+    <span className={cn('relative inline-flex shrink-0', starSizeClass[size])}>
       <Star
         className={cn(starSizeClass[size], 'fill-star-empty text-star-empty')}
         aria-hidden
