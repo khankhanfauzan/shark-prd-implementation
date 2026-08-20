@@ -101,7 +101,7 @@ export function ProductDetail() {
       </section>
 
       <div className="mt-8 border-t border-border/70 pt-12 sm:mt-12">
-        <ReviewSection />
+        <ReviewSection reviews={product.reviews ?? []} />
       </div>
     </>
   );

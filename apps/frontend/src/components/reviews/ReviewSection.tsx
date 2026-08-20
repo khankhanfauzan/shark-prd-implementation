@@ -9,21 +9,14 @@ import {
   EmptyReviewsState,
   QueryErrorState,
   RatingSkeleton,
-  ReviewCardSkeleton,
 } from '@/components/reviews/ReviewStates';
-import {
-  useRatingSummary,
-  useReviewsPreview,
-} from '@/hooks/use-product-queries';
+import { useRatingSummary } from '@/hooks/use-product-queries';
+import type { Review } from '@/lib/types';
 
-export function ReviewSection() {
+export function ReviewSection({ reviews }: { reviews: Review[] }) {
   const summaryQuery = useRatingSummary();
-  const previewQuery = useReviewsPreview(2);
-
-  const isPending = summaryQuery.isPending || previewQuery.isPending;
-  const isError = summaryQuery.isError || previewQuery.isError;
   const summary = summaryQuery.data;
-  const preview = previewQuery.data?.data ?? [];
+  const hasReviews = reviews.length > 0;
 
   return (
     <section id="reviews" className="animate-fade-up-delay scroll-mt-8">
@@ -39,32 +32,25 @@ export function ReviewSection() {
         </p>
       </div>
 
-      {isPending ? (
-        <>
-          <RatingSkeleton />
-          <ReviewCardSkeleton />
-          <ReviewCardSkeleton />
-        </>
-      ) : isError ? (
+      {summaryQuery.isPending ? (
+        <RatingSkeleton />
+      ) : summaryQuery.isError ? (
         <QueryErrorState
-          message={
-            summaryQuery.error?.message || previewQuery.error?.message
-          }
+          message={summaryQuery.error?.message}
           onRetry={() => {
             void summaryQuery.refetch();
-            void previewQuery.refetch();
           }}
         />
-      ) : preview.length === 0 ? (
+      ) : !hasReviews ? (
         <EmptyReviewsState />
       ) : (
         <>
           <RatingSummary
             average={summary?.averageRating ?? 0}
-            totalReviews={summary?.totalReviews ?? 0}
+            totalReviews={summary?.totalReviews ?? reviews.length}
           />
           <div className="mt-2">
-            {preview.map((review) => (
+            {reviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
           </div>
