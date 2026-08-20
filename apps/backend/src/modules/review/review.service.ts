@@ -28,31 +28,26 @@ export class ReviewService {
     };
   }
 
-  async findAll(offset: number, limit: number) {
+  async findAll(cursor: string | undefined, limit: number) {
     const product = await this.reviewRepository.findFirstProduct();
 
     if (!product) {
       throw new NotFoundException('Product not found');
     }
 
-    const currentOffset = Number.isFinite(offset)
-      ? Math.max(Math.trunc(offset), 0)
-      : 0;
     const currentLimit = Number.isFinite(limit)
       ? Math.min(Math.max(Math.trunc(limit), 1), MAX_LIMIT)
       : DEFAULT_LIMIT;
 
-    const [reviews, totalItems] = await Promise.all([
-      this.reviewRepository.findManyByProductId(
-        product.id,
-        currentOffset,
-        currentLimit,
-      ),
-      this.reviewRepository.countByProductId(product.id),
-    ]);
+    const reviews = await this.reviewRepository.findManyByProductId(
+      product.id,
+      cursor,
+      currentLimit,
+    );
 
-    const totalPages = Math.ceil(totalItems / currentLimit);
-    const currentPage = Math.floor(currentOffset / currentLimit) + 1;
+    const nextCursor = reviews.length === currentLimit
+      ? reviews[reviews.length - 1]?.id
+      : null;
 
     return {
       data: reviews.map((review) => ({
@@ -63,12 +58,8 @@ export class ReviewService {
         createdAt: review.createdAt,
       })),
       pagination: {
-        offset: currentOffset,
         limit: currentLimit,
-        currentPage,
-        totalItems,
-        totalPages,
-        hasMore: currentOffset + reviews.length < totalItems,
+        nextCursor,
       },
     };
   }

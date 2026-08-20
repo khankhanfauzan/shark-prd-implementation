@@ -33,11 +33,11 @@ export class ReviewController {
   @Get()
   @ApiOperation({ summary: 'Get paginated product reviews' })
   @ApiQuery({
-    name: 'offset',
+    name: 'cursor',
     required: false,
-    type: Number,
-    description: 'Number of items to skip (min: 0)',
-    example: 0,
+    type: String,
+    description: 'Cursor for pagination (review ID)',
+    example: 'clxxx123456',
   })
   @ApiQuery({
     name: 'limit',
@@ -52,13 +52,13 @@ export class ReviewController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Validation failed (invalid offset/limit)',
+    description: 'Validation failed (invalid cursor/limit)',
   })
   @ApiResponse({
     status: 404,
     description: 'Product not found',
   })
   findAll(@Query() query: PaginatedReviewQueryDto) {
-    return this.reviewService.findAll(query.offset ?? 0, query.limit ?? 10);
+    return this.reviewService.findAll(query.cursor, query.limit ?? 10);
   }
 }

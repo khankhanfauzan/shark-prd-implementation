@@ -41,11 +41,13 @@ export function getRatingSummary() {
   return apiFetch<RatingSummary>('/product/rating-summary');
 }
 
-export function getReviews(offset = 0, limit = 10) {
+export function getReviews(cursor?: string, limit = 10) {
   const params = new URLSearchParams({
-    offset: String(offset),
     limit: String(limit),
   });
+  if (cursor) {
+    params.set('cursor', cursor);
+  }
   return apiFetch<PaginatedReviews>(`/product/reviews?${params.toString()}`);
 }
 
