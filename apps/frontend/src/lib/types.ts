@@ -25,12 +25,8 @@ export type RatingSummary = {
 };
 
 export type ReviewPagination = {
-  offset: number;
   limit: number;
-  currentPage: number;
-  totalItems: number;
-  totalPages: number;
-  hasMore: boolean;
+  nextCursor: string | null;
 };
 
 export type PaginatedReviews = {

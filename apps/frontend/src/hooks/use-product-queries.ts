@@ -36,11 +36,8 @@ export function useReviewsInfinite(limit = PAGE_LIMIT) {
   return useInfiniteQuery({
     queryKey: queryKeys.reviewsInfinite(limit),
     queryFn: ({ pageParam }) => getReviews(pageParam, limit),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) =>
-      lastPage.pagination.hasMore
-        ? lastPage.pagination.offset + lastPage.pagination.limit
-        : undefined,
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.pagination.nextCursor ?? undefined,
   });
 }
 

@@ -23,11 +23,14 @@ export class ReviewRepository {
     });
   }
 
-  async findManyByProductId(productId: string, offset: number, limit: number) {
+  async findManyByProductId(productId: string, cursor: string | undefined, limit: number) {
     return this.prisma.review.findMany({
       where: { productId },
-      skip: offset,
       take: limit,
+      ...(cursor && {
+        cursor: { id: cursor },
+        skip: 1,
+      }),
       orderBy: [
         { createdAt: 'desc' },
         { id: 'desc' },

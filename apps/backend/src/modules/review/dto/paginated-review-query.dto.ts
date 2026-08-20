@@ -1,12 +1,10 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class PaginatedReviewQueryDto {
   @IsOptional()
-  @Type(() => Number)
-  @IsInt({ message: 'Offset must be an integer' })
-  @Min(0, { message: 'Offset must not be negative' })
-  offset?: number = 0;
+  @IsString({ message: 'Cursor must be a string' })
+  cursor?: string;
 
   @IsOptional()
   @Type(() => Number)

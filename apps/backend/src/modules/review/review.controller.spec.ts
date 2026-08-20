@@ -30,8 +30,8 @@ describe('ReviewController', () => {
   it('should pass parsed pagination params to service', async () => {
     reviewServiceMock.findAll.mockResolvedValueOnce({ data: [], pagination: {} });
 
-    await controller.findAll('20', '10');
+    await controller.findAll({ cursor: 'clxxx123', limit: 10 });
 
-    expect(reviewServiceMock.findAll).toHaveBeenCalledWith(20, 10);
+    expect(reviewServiceMock.findAll).toHaveBeenCalledWith('clxxx123', 10);
   });
 });
