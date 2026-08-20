@@ -1,5 +1,4 @@
 import { StarRating } from '@/components/reviews/StarRating';
-import { Separator } from '@/components/ui/separator';
 
 type RatingSummaryProps = {
   average: number;
@@ -14,34 +13,32 @@ export function RatingSummary({
 }: RatingSummaryProps) {
   if (empty || totalReviews === 0) {
     return (
-      <div className="space-y-2 pb-6">
+      <div className="mb-6 space-y-2">
         <StarRating value={0} size="lg" />
         <p className="text-sm text-muted-foreground">Belum ada ulasan</p>
-        <Separator />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 pb-2">
-      <div className="flex flex-wrap items-end gap-4">
-        <div>
-          <p className="text-sm text-muted-foreground">Rating keseluruhan</p>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-serif text-4xl tracking-tight">
-              {average.toFixed(1)}
-            </span>
-            <span className="text-muted-foreground">/ 5</span>
-          </div>
-        </div>
-        <div className="pb-1">
-          <StarRating value={average} size="md" />
-          <p className="mt-1 text-sm text-muted-foreground">
-            {totalReviews} ulasan
-          </p>
+    <div className="mb-2 flex flex-wrap items-end gap-5 rounded-[1.4rem] border border-white/60 bg-card/55 px-5 py-5 shadow-sm backdrop-blur-md">
+      <div>
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Rating keseluruhan
+        </p>
+        <div className="mt-1 flex items-baseline gap-2">
+          <span className="font-editorial text-6xl font-medium leading-none tracking-[-0.05em]">
+            {average.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground">/ 5</span>
         </div>
       </div>
-      <Separator />
+      <div className="pb-1">
+        <StarRating value={average} size="md" />
+        <p className="mt-1 text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
+          {totalReviews} ulasan
+        </p>
+      </div>
     </div>
   );
 }

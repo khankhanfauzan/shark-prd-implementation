@@ -85,7 +85,7 @@ export function ProductGallery({
   if (!activeImage) {
     return (
       <div
-        className="aspect-square w-full rounded-xl bg-[linear-gradient(145deg,oklch(0.82_0.03_240)_0%,oklch(0.72_0.05_165)_48%,oklch(0.55_0.06_165)_100%)]"
+        className="aspect-square w-full rounded-[2rem_0.75rem_2rem_0.75rem] bg-[linear-gradient(165deg,oklch(0.93_0.02_165)_0%,oklch(0.86_0.03_240)_48%,oklch(0.78_0.04_165)_100%)]"
         role="img"
         aria-label={`${alt} placeholder`}
       />
@@ -94,25 +94,25 @@ export function ProductGallery({
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-muted">
+      <div className="relative aspect-square w-full overflow-hidden rounded-[2rem_0.75rem_2rem_0.75rem] bg-[linear-gradient(165deg,oklch(0.93_0.02_165)_0%,oklch(0.86_0.03_240)_48%,oklch(0.78_0.04_165)_100%)] shadow-[0_30px_80px_oklch(0.3_0.04_165_/_0.18)]">
         <Image
           src={activeImage}
           alt={alt}
           fill
           priority
-          className="object-contain p-4"
+          className="object-contain p-[8%]"
           sizes="(min-width: 1024px) 50vw, 100vw"
         />
       </div>
 
       {images.length > 1 ? (
-        <div className="relative">
+        <div className="relative px-1">
           {canScrollLeft ? (
             <button
               type="button"
               onClick={() => scrollThumbs('left')}
               aria-label="Lihat gambar sebelumnya"
-              className="absolute left-0 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-md bg-foreground text-background shadow-sm"
+              className="absolute left-0 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-foreground text-background shadow-sm"
             >
               <ChevronLeft className="size-4" />
             </button>
@@ -134,9 +134,9 @@ export function ProductGallery({
                   aria-label={`Gambar ${index + 1}`}
                   aria-pressed={isActive}
                   className={cn(
-                    'relative size-20 shrink-0 overflow-hidden rounded-lg border-2 bg-muted transition-colors',
+                    'relative size-20 shrink-0 overflow-hidden rounded-[0.9rem_0.35rem] border bg-[linear-gradient(165deg,oklch(0.94_0.015_165)_0%,oklch(0.9_0.02_240)_100%)] transition-colors',
                     isActive
-                      ? 'border-primary'
+                      ? 'border-foreground'
                       : 'border-transparent hover:border-border'
                   )}
                 >
@@ -144,7 +144,7 @@ export function ProductGallery({
                     src={image}
                     alt=""
                     fill
-                    className="object-contain p-1"
+                    className="object-contain p-1.5"
                     sizes="80px"
                   />
                 </button>
@@ -157,7 +157,7 @@ export function ProductGallery({
               type="button"
               onClick={() => scrollThumbs('right')}
               aria-label="Lihat gambar berikutnya"
-              className="absolute right-0 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-md bg-foreground text-background shadow-sm"
+              className="absolute right-0 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-foreground text-background shadow-sm"
             >
               <ChevronRight className="size-4" />
             </button>

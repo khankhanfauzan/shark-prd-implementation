@@ -85,10 +85,12 @@ export function ReviewForm() {
         id="write-review"
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-5 rounded-xl border bg-muted/30 p-5 scroll-mt-6"
+        className="space-y-5 rounded-[1.5rem] border border-white/60 bg-card/55 p-6 shadow-sm backdrop-blur-md scroll-mt-6"
       >
         <div className="space-y-1">
-          <p className="font-serif text-lg font-semibold">Kirim ulasan</p>
+          <p className="font-editorial text-2xl font-medium tracking-[-0.03em]">
+            Leave a mark
+          </p>
           <p className="text-sm text-muted-foreground">
             Nama dan rating wajib diisi. Deskripsi bersifat opsional.
           </p>
@@ -105,6 +107,7 @@ export function ReviewForm() {
               </FormLabel>
               <FormControl>
                 <Input
+                  className="h-11 rounded-xl bg-background/70"
                   placeholder="Nama Anda"
                   autoComplete="name"
                   maxLength={NAME_MAX}
@@ -167,6 +170,7 @@ export function ReviewForm() {
                 </FormLabel>
                 <FormControl>
                   <Textarea
+                    className="min-h-[120px] rounded-xl bg-background/70"
                     placeholder="Ceritakan pengalaman Anda memakai produk ini"
                     maxLength={DESCRIPTION_MAX}
                     disabled={createReview.isPending}
@@ -198,7 +202,7 @@ export function ReviewForm() {
 
         <Button
           type="submit"
-          className="w-full sm:w-auto"
+          className="h-12 rounded-full px-6"
           disabled={createReview.isPending}
         >
           {createReview.isPending ? (

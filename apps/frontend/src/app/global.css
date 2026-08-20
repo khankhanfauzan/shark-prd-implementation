@@ -56,6 +56,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-display), ui-serif, Georgia, serif;
+  --font-editorial: var(--font-editorial-face), ui-serif, Georgia, serif;
 }
 
 * {
@@ -108,4 +109,14 @@ a {
 
 .animate-fade-up-delay {
   animation: fade-up 0.5s ease-out 0.12s both;
+}
+
+.editorial-grain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.14;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
 }
