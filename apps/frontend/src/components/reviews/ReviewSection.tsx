@@ -9,30 +9,22 @@ import {
   EmptyReviewsState,
   QueryErrorState,
   RatingSkeleton,
-  ReviewCardSkeleton,
 } from '@/components/reviews/ReviewStates';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  useRatingSummary,
-  useReviewsPreview,
-} from '@/hooks/use-product-queries';
+import { useRatingSummary } from '@/hooks/use-product-queries';
+import type { Review } from '@/lib/types';
 
-export function ReviewSection() {
+export function ReviewSection({ reviews }: { reviews: Review[] }) {
   const summaryQuery = useRatingSummary();
-  const previewQuery = useReviewsPreview(2);
-
-  const isPending = summaryQuery.isPending || previewQuery.isPending;
-  const isError = summaryQuery.isError || previewQuery.isError;
   const summary = summaryQuery.data;
-  const preview = previewQuery.data?.data ?? [];
+  const hasReviews = reviews.length > 0;
 
   return (
     <Card id="reviews" className="animate-fade-up-delay shadow-sm">
@@ -44,50 +36,42 @@ export function ReviewSection() {
       </CardHeader>
 
       <CardContent>
-        {isPending ? (
-          <>
-            <RatingSkeleton />
-            <ReviewCardSkeleton />
-            <ReviewCardSkeleton />
-          </>
-        ) : isError ? (
+        {summaryQuery.isPending ? (
+          <RatingSkeleton />
+        ) : summaryQuery.isError ? (
           <QueryErrorState
-            message={
-              summaryQuery.error?.message || previewQuery.error?.message
-            }
+            message={summaryQuery.error?.message}
             onRetry={() => {
               void summaryQuery.refetch();
-              void previewQuery.refetch();
             }}
           />
+        ) : hasReviews ? (
+          <RatingSummary
+            average={summary?.averageRating ?? 0}
+            totalReviews={summary?.totalReviews ?? reviews.length}
+          />
         ) : (
-          preview.length === 0 ? (
-            <EmptyReviewsState />
-          ) : (
-            <>
-              <RatingSummary
-                average={summary?.averageRating ?? 0}
-                totalReviews={summary?.totalReviews ?? 0}
-              />
-              {preview.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-              ))}
-            </>
-          )
+          <EmptyReviewsState />
         )}
+
+        {hasReviews
+          ? reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))
+          : null}
+
+        {hasReviews ? (
+          <div className="pt-4">
+            <Button asChild>
+              <Link href="/product/reviews">View More</Link>
+            </Button>
+          </div>
+        ) : null}
 
         <div className="pt-4">
           <ReviewForm />
         </div>
       </CardContent>
-
-      {preview.length > 0 ? (
-        <CardFooter>
-          <Button asChild>
-            <Link href="/product/reviews">View More</Link>
-          </Button>
-        </CardFooter>
-      ) : null}
     </Card>
   );
 }

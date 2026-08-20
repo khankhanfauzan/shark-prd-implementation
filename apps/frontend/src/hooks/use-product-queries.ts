@@ -16,7 +16,6 @@ import {
 import { queryKeys } from '@/lib/query-keys';
 import type { CreateReviewInput } from '@/lib/types';
 
-const PREVIEW_LIMIT = 2;
 const PAGE_LIMIT = 10;
 
 export function useProducts() {
@@ -30,13 +29,6 @@ export function useRatingSummary() {
   return useQuery({
     queryKey: queryKeys.ratingSummary,
     queryFn: getRatingSummary,
-  });
-}
-
-export function useReviewsPreview(limit = PREVIEW_LIMIT) {
-  return useQuery({
-    queryKey: queryKeys.reviewsPreview(limit),
-    queryFn: () => getReviews(0, limit),
   });
 }
 
