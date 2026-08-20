@@ -56,7 +56,7 @@ export function ProductDetail() {
             {product.name}
           </h1>
           {product.description ? (
-            <p className="mt-5 max-w-md text-[1.02rem] leading-relaxed text-muted-foreground">
+            <p className="mt-5 max-w-md text-[1.02rem] leading-relaxed text-foreground/80">
               {product.description}
             </p>
           ) : null}
@@ -86,13 +86,13 @@ export function ProductDetail() {
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#reviews"
-              className="inline-flex h-12 items-center rounded-full bg-foreground px-5 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground"
+              className="inline-flex h-12 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
             >
               Lihat ulasan
             </a>
             <Link
               href="/product/reviews"
-              className="inline-flex h-12 items-center rounded-full border border-border bg-background/50 px-5 text-sm font-semibold backdrop-blur-md transition hover:-translate-y-0.5 hover:border-foreground"
+              className="inline-flex h-12 items-center rounded-full border border-border bg-background/80 px-5 text-sm font-semibold text-foreground backdrop-blur-md transition hover:-translate-y-0.5 hover:border-foreground"
             >
               Semua ulasan
             </Link>

@@ -37,7 +37,7 @@ export function EditorialNav() {
               className={cn(
                 'rounded-full px-3 py-1.5 text-sm transition-colors',
                 active
-                  ? 'bg-foreground text-background'
+                  ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
