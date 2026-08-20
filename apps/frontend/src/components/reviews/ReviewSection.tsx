@@ -72,14 +72,6 @@ export function ReviewSection({ reviews }: { reviews: Review[] }) {
           <ReviewForm />
         </div>
       </CardContent>
-
-      {preview.length > 0 ? (
-        <CardFooter>
-          <Button asChild className="!text-white">
-            <Link href="/product/reviews">View More</Link>
-          </Button>
-        </CardFooter>
-      ) : null}
     </Card>
   );
 }
