@@ -57,7 +57,7 @@ export function ReviewSection({ reviews }: { reviews: Review[] }) {
           <div className="pt-6">
             <Link
               href="/product/reviews"
-              className="inline-flex h-12 items-center rounded-full bg-foreground px-5 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground"
+              className="inline-flex h-12 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
             >
               View More
             </Link>

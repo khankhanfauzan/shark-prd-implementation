@@ -46,36 +46,7 @@
 }
 
 .nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
   animation: rise 0.7s ease-out both;
-}
-
-.brand {
-  display: flex;
-  align-items: baseline;
-  gap: 0.7rem;
-}
-
-.mark {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-}
-
-.issue {
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-}
-
-.links {
-  display: flex;
-  gap: 0.25rem;
 }
 
 .hero {
