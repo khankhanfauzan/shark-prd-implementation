@@ -1,10 +1,59 @@
-# 🦈 Shark PRD Implementation - Nx Monorepo
+# 🦈 Shark PRD Implementation - Product Review & Rating System - Nx Monorepo
 
 Monorepo berbasis **Nx Workspace** yang mengintegrasikan aplikasi **Frontend (Next.js)** dan **Backend (NestJS)** dalam satu ekosistem pengembangan, dengan modul database terisolasi berbasis **Prisma ORM v7** dan **PostgreSQL**.
 
 ---
 
-## 🛠️ Tech Stack & Prasyarat Sistem
+## 📌 Project Overview
+
+Proyek ini mengimplementasikan spesifikasi kebutuhan produk (PRD) untuk modul ulasan dan penilaian produk (Product Reviews & Rating System). Fokus utama proyek adalah menghadirkan antarmuka editorial responsif (Web Mobile simulation) yang terhubung langsung dengan backend NestJS secara riil (bukan mock data).
+
+- Live Demo: [shark-prd-implementation.vercel.app](shark-prd-implementation.vercel.app)
+
+- Repository: [github.com/khankhanfauzan/shark-prd-implementation](github.com/khankhanfauzan/shark-prd-implementation)
+
+---
+
+## 🎯 User Stories & Acceptance Criteria (PRD Mapping)
+
+Proyek ini merealisasikan User Story Team 2 dari PRD:
+### 1. US-01: Product Detail Page - Overall Rating of the Product
+
+   -  User Story: Sebagai **pengguna/user**, saya ingin melihat ringkasan rating keseluruhan produk agar dapat mengevaluasi tingkat kepuasan pelanggan secara instan.
+
+   -  Kriteria & Implementasi:
+
+      -  Menampilkan **skor agregat numerik** (1 angka di belakang koma, misal **4.8/5.0**) dan representasi visual bintang (star visualization).
+
+      -  Menangani **status data kosong (empty state)** dan indikator pemuatan (**loading state**).
+
+      -  Terkoneksi dengan **kalkulasi agregat backend** secara dinamis.
+
+### 2. US-02: Product Detail Page - Review Section & Navigation
+
+   - User Story: Sebagai **pembeli/buyer**, saya ingin menavigasi ulasan lengkap dengan mudah untuk membaca umpan balik pelanggan secara komprehensif.
+
+   - Kriteria & Implementasi:
+
+      -  Tombol navigasi / preview ulasan di PDP menuju halaman ulasan penuh (**/product/reviews**).
+
+      -  Implementasi **infinite scroll** / pemuatan inkremental untuk performa optimal.
+
+      -  Target load SLA ulasan di bawah 2 detik dengan **lazy loading** dan **loading skeletons**.
+
+      -  **Form interaktif** untuk menambahkan ulasan baru.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+   - **Frontend**: Next.js, React, Tailwind CSS / Styling Modern, Lucide Icons
+
+   - **Backend**: NestJS, RESTful API
+
+   - **Deployment**: Vercel (Frontend)
+
+## 🚀 Prasyarat Sistem
 
 Sebelum memulai pengembangan, pastikan perangkat Anda telah terinstal:
 
@@ -241,6 +290,7 @@ shark-prd-implementation/
 ├── .env.example           # Template variabel lingkungan — SALIN ini ke .env
 ├── nx.json                # Konfigurasi workspace Nx
 └── package.json           # Dependencies root workspace
+└── readme.md
 ```
 
 ---
@@ -292,3 +342,16 @@ DATABASE_URL="postgresql://username:@127.0.0.1:5432/shark_db?schema=public"
 # Menjadi (BENAR):
 DATABASE_URL="postgresql://username@127.0.0.1:5432/shark_db?schema=public"
 ```
+
+## 👥 Tim Pengembang & Kontribusi
+
+   - Fauzan Akbar Khan — Product Manager
+   - Budi Arif - Backend Lead
+     - Danu Renmi Wijaya - Backend Engineer
+     - Zahratunnisa - Backend Engineer
+     - Harits Ghiffari Hanif - Backend Engineer
+   - Rachmat Febrian - Frontend Lead
+     - Valentino Juan Agushta - Frontend Engineer
+     - Tommy Poernomo - Frontend Engineer
+     - Aditya Raafi Yudhatama - Frontend Engineer
+     - Stephen Joshua Manullang - Frontend Engineer
